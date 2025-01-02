@@ -3,6 +3,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report
 import numpy as np
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
@@ -54,8 +55,6 @@ y_pred_nn = nn_model.predict(X_test)
 print("Neural Network Accuracy:", accuracy_score(y_test, y_pred_nn))
 
 
+print("MLPClassifier Report:\n", classification_report(y_test, mlp_preds))
+print("RandomForestClassifier Report:\n", classification_report(y_test, rf_preds))
 
-#svm_model = SVC(kernel='rbf')
-#svm_model.fit(X_train, y_train)
-#y_pred_svm = svm_model.predict(X_test)
-#print("SVM Accuracy:", accuracy_score(y_test, y_pred_svm))
