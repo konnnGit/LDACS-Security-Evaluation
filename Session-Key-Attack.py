@@ -45,9 +45,11 @@ y_pred = model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 print("Random Forest Accuracy:", accuracy)
 
-
+# Train Random MLPCl model
 nn_model = MLPClassifier(hidden_layer_sizes=(100, 50), max_iter=500)
 nn_model.fit(X_train, y_train)
+
+# Predict and evaluate
 y_pred_nn = nn_model.predict(X_test)
 print("Neural Network Accuracy:", accuracy_score(y_test, y_pred_nn))
 
