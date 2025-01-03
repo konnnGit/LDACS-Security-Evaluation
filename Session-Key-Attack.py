@@ -41,7 +41,7 @@ X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=
 model = RandomForestClassifier()
 model.fit(X_train, y_train)
 
-# Predict and evaluate
+# Predict Random Forest  and evaluate
 y_pred = model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 print("Random Forest Accuracy:", accuracy)
@@ -50,11 +50,15 @@ print("Random Forest Accuracy:", accuracy)
 nn_model = MLPClassifier(hidden_layer_sizes=(100, 50), max_iter=500)
 nn_model.fit(X_train, y_train)
 
-# Predict and evaluate
+# Predict MLPCl and evaluate
 y_pred_nn = nn_model.predict(X_test)
 print("Neural Network Accuracy:", accuracy_score(y_test, y_pred_nn))
 
+# Total report
+print("MLPClassifier Report:\n", classification_report(y_test, y_pred_nn))
+print("RandomForestClassifier Report:\n", classification_report(y_test, y_pred))
 
-print("MLPClassifier Report:\n", classification_report(y_test, mlp_preds))
-print("RandomForestClassifier Report:\n", classification_report(y_test, rf_preds))
+#print("MLPClassifier Report:\n", classification_report(y_test, mlp_preds))
+#print("RandomForestClassifier Report:\n", classification_report(y_test, rf_preds))
+
 
