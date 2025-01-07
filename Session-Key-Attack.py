@@ -28,7 +28,7 @@ def generate_dataset(size, keys, plaintexts):
     return features, labels
 
 # Parameters
-keys = [get_random_bytes(16) for _ in range(2)]  # 5 random keys
+keys = [get_random_bytes(16) for _ in range(2)]  #  random keys
 plaintexts = [b"REQUEST CLIMB TO FL370", b"UNABLE DUE TO TRAFFIC",  b"CLIMB TO AND MAINTAIN FL270", b"REPORT LEVEL FL270",b"REQUEST DIVE TO FL200",  b"DIVE TO AND MAINTAIN FL200"]  # 4 plaintexts
 
 # Generate dataset
@@ -38,27 +38,23 @@ features, labels = generate_dataset(50, keys, plaintexts)
 X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.2, random_state=42)
 
 # Train Random Forest model
-model = RandomForestClassifier()
+model = RandomForestClassifier(random_state=42)
 model.fit(X_train, y_train)
 
-# Predict Random Forest  and evaluate
+# Make predictions
 y_pred = model.predict(X_test)
+
+# Calculate metrics
 accuracy = accuracy_score(y_test, y_pred)
-print("Random Forest Accuracy:", accuracy)
+precision = precision_score(y_test, y_pred, average='macro')
+recall = recall_score(y_test, y_pred, average='macro')
+f1 = f1_score(y_test, y_pred, average='macro')
 
-# Train Random MLPCl model
-nn_model = MLPClassifier(hidden_layer_sizes=(100, 50), max_iter=500)
-nn_model.fit(X_train, y_train)
-
-# Predict MLPCl and evaluate
-y_pred_nn = nn_model.predict(X_test)
-print("Neural Network Accuracy:", accuracy_score(y_test, y_pred_nn))
-
-# Total report
-print("MLPClassifier Report:\n", classification_report(y_test, y_pred_nn))
-print("RandomForestClassifier Report:\n", classification_report(y_test, y_pred))
-
-#print("MLPClassifier Report:\n", classification_report(y_test, mlp_preds))
-#print("RandomForestClassifier Report:\n", classification_report(y_test, rf_preds))
+# Print metrics
+print("Model Evaluation Metrics:")
+print(f"Accuracy: {accuracy:.2f}")
+print(f"Precision: {precision:.2f}")
+print(f"Recall: {recall:.2f}")
+print(f"F1-Score: {f1:.2f}")
 
 
