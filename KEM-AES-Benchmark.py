@@ -88,7 +88,6 @@ def the_plot(categories, group1,group2):
     # Add labels, title, and legend
     ax.set_xlabel('Algorithm')
     ax.set_ylabel('Time')
-    #ax.set_title('Dual Bar Chart Example')
     ax.set_xticks(x)
     ax.set_xticklabels(categories)
     ax.legend()
