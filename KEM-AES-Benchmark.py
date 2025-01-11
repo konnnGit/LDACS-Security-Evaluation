@@ -100,10 +100,12 @@ algorithmsL3=['BIKE-L3','Kyber768','Classic-McEliece-460896']
 algorithmsL5=['BIKE-L5','Kyber1024','Classic-McEliece-6960119']
 cateories=['BIKE','Kyber','Classic-MCEliece']
 message = "REQUEST TO CLIMB IN FL350"
-aes_key_size=32
+aes_key_size=32 #32 bytes for 256 key
 #iterations=100
 groupKEML3, groupAESL3=run_main(100,algorithmsL3, message)
+print (f"For KEM {algorithmsL3}, execution time  {groupKEML3}")
 groupKEML5, groupAESL5=run_main(100,algorithmsL5, message)
+print (f"For KEM {algorithmsL5}, execution time  {groupKEML5}")
 the_plot(cateories, groupKEML3,groupKEML5)
 the_plot(cateories, groupAESL3,groupAESL5)
 
