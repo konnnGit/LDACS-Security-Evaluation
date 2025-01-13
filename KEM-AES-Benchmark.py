@@ -35,9 +35,9 @@ def kem_encrypt(algorithm):
 def create_AES_cipher(kem, public_key, key_size):
     ciphertext, shared_secret = kem.encap_secret(public_key)
     # Use shared secret as key for AES encryption
-    # We only use the first 16 bytes for AES-128, or first 32 for AES-256
+    # 16 bytes for AES-128, or first 32 for AES-256
     aes_key = shared_secret[:key_size]  # Adjust based on AES key size (16 for AES-128)
-    iv = os.urandom(16)  # Initialization vector for AES
+    iv = os.urandom(16)  # Initialization vector for AES, 16 bytes
     # Encrypt the message with AES in CBC mode
     #cipher = AES.new(aes_key, AES.MODE_CBC, iv)
     return aes_key,iv
@@ -50,7 +50,7 @@ def AES_decrypt(key, iv, ciphertext):
     cipher = AES.new(key, AES.MODE_CBC, iv)
     decrypted_message = unpad(cipher.decrypt(ciphertext), AES.block_size).decode()
     return decrypted_message
-def run_main(iterations, algorithms, message):
+def run_main(iterations, algorithms, message, aes_key_size):
     avg_kem_time=[]
     avg_aes_time=[]
     for t in range(len(algorithms)):
@@ -102,9 +102,9 @@ cateories=['BIKE','Kyber','Classic-MCEliece']
 message = "REQUEST TO CLIMB IN FL350"
 aes_key_size=32 #32 bytes for 256 key
 #iterations=100
-groupKEML3, groupAESL3=run_main(100,algorithmsL3, message)
+groupKEML3, groupAESL3=run_main(100,algorithmsL3, message, aes_key_size)
 print (f"For KEM {algorithmsL3}, execution time  {groupKEML3}")
-groupKEML5, groupAESL5=run_main(100,algorithmsL5, message)
+groupKEML5, groupAESL5=run_main(100,algorithmsL5, message, aes_key_size)
 print (f"For KEM {algorithmsL5}, execution time  {groupKEML5}")
 the_plot(cateories, groupKEML3,groupKEML5)
 the_plot(cateories, groupAESL3,groupAESL5)
