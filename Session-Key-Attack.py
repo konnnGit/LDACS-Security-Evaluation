@@ -28,7 +28,7 @@ def generate_dataset(size, keys, plaintexts):
     return features, labels
 
 # Parameters
-keys = [get_random_bytes(16) for _ in range(2)]  #  random keys
+keys = [get_random_bytes(32) for _ in range(2)]  #  random keys
 plaintexts = [b"REQUEST CLIMB TO FL370", b"UNABLE DUE TO TRAFFIC",  b"CLIMB TO AND MAINTAIN FL270", b"REPORT LEVEL FL270",b"REQUEST DIVE TO FL200",  b"DIVE TO AND MAINTAIN FL200"]  # 4 plaintexts
 
 # Generate dataset
