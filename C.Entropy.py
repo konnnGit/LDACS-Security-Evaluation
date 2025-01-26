@@ -39,7 +39,7 @@ def calculate_entropy(data):
     entropy = -sum((count / total) * math.log2(count / total) for count in freq.values())
     return entropy/8.0000
 
-# Example usage
+# Main()
 if __name__ == "__main__":
     # AES-256 key (32 bytes)
     aes_key_size=32
@@ -65,21 +65,16 @@ if __name__ == "__main__":
           print(f"For oqs {algorithms[i]} Entropy of Ciphertext: {entropy:.4f} bits/byte")
     f.close()
 
-
-    # Data: List of lists
-    x = [1, 2, 3, 4, 5, 6, 7]  # X-axis values
-    y = entropy_list
-
-    # Plot each inner list as a separate line
+    #Plot
+    x = [1, 2, 3, 4, 5, 6, 7]  
+    y = entropy_list    
     plt.figure(figsize=(8, 5))
     for i, y_values in enumerate(y):
         plt.plot(x, y_values, marker='o', linestyle='-', label=f' {algorithms[i]}')
-    plt.xticks(ticks=x)  # Set only integer ticks
-    # Adding titles and labels
+    plt.xticks(ticks=x)  # Set only integer ticks    
     #plt.title('AES-256-GCM entropy encrypting alike content, from the AS side, with the same key.', fontsize=16)
     plt.xlabel('Number of Messages', fontsize=12)
     plt.ylabel('Entropy', fontsize=12)
-
     # Add a legend and grid
     plt.legend()
     #plt.grid(True, linestyle='--', alpha=0.5)
