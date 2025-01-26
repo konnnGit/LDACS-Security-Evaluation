@@ -4,16 +4,7 @@ import time
 
 # Function to generate reverse PUF data
 def generate_reverse_puf_data(num_challenges, num_bits, noise_level):
-    """
-    Generate data for a reverse PUF attack (response -> challenge).
-    Args:
-        num_challenges (int): Number of challenges to simulate.
-        num_bits (int): Number of response bits per challenge.
-        noise_level (float): Probability of flipping a response bit due to noise.
-    Returns:
-        challenges (ndarray): Randomly generated challenges.
-        responses (ndarray): Corresponding responses (with noise).
-    """
+    
     # Randomly generate challenges and stable PUF responses
     challenges = np.random.randint(0, 2, size=(num_challenges, num_bits))
     stable_responses = np.random.randint(0, 2, size=(num_challenges, response_bits))
@@ -25,7 +16,7 @@ def generate_reverse_puf_data(num_challenges, num_bits, noise_level):
     return challenges, noisy_responses
 
 # Generate synthetic SRAM PUF data
-num_challenges = 100  # Number of challenges
+num_challenges = 100  
 num_bits = 32          # Number of bits in each challenge
 response_bits = 168
 noise_level = 0.05     # Noise level
@@ -42,18 +33,8 @@ challenges_test = challenges[num_train:]
 
 # Define the objective function for CMA-ES
 def cma_objective(candidate, response, target_challenge):
-    """
-    Objective function for CMA-ES to minimize the distance between predicted and true challenges.
-    Args:
-        candidate (array): Candidate solution (predicted challenge bits).
-        response (array): Corresponding response.
-        target_challenge (array): True challenge bits.
-    Returns:
-        float: Distance (error) between the candidate solution and the true challenge.
-    """
     # Convert candidate to binary (threshold at 0.5)
     candidate_binary = (candidate > 0.5).astype(int)
-
     # Compute error as Hamming distance between candidate and target challenge
     error = np.sum(candidate_binary != target_challenge)
     return error
@@ -63,7 +44,6 @@ predicted_challenges = []
 for i, response in enumerate(responses_test):
     # Extract the true challenge for comparison
     true_challenge = challenges_test[i]
-
     # Define the initial guess (random values) and step size
     initial_guess = np.random.rand(num_bits)
     step_size = 0.3
