@@ -47,7 +47,7 @@ if __name__ == "__main__":
     messages = ["REQUEST CLIMB TO FL300" , "CMPLY", "REQUEST DIVE TO FL230","CMPLY", "REQUEST DIVE TO FL300", "REQUEST DIVE TO FL200", "CMPLY"]
     #messages=["The test setup in Tallinn, Estonia, did not aim at quantitative aspects such as bandwidth occupation"]
     ciphertexts=[]
-    entropy_list=[[],[],[],[],[]]
+    entropy_list=[[],[],[],[],[]]# long as the number of algorithms
     f=open("stats.txt", "w")
     for i in range(len(algorithms)):
       kem = oqs.KeyEncapsulation(algorithms[i])
