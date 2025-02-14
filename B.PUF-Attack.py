@@ -3,16 +3,13 @@ import cma
 import time
 
 # Function to generate reverse PUF data
-def generate_reverse_puf_data(num_challenges, num_bits, noise_level):
-    
+def generate_reverse_puf_data(num_challenges, num_bits, noise_level):    
     # Randomly generate challenges and stable PUF responses
     challenges = np.random.randint(0, 2, size=(num_challenges, num_bits))
     stable_responses = np.random.randint(0, 2, size=(num_challenges, response_bits))
-
     # Introduce noise to responses
     noise = np.random.rand(num_challenges, response_bits) < noise_level
     noisy_responses = np.bitwise_xor(stable_responses, noise.astype(int))
-
     return challenges, noisy_responses
 
 # Generate synthetic SRAM PUF data
