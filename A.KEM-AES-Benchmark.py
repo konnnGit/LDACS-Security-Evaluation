@@ -1,7 +1,5 @@
 
 
-
-
 import oqs
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
@@ -81,14 +79,22 @@ algorithmsL5=['BIKE-L5','Kyber1024', 'Classic-McEliece-6960119' ]
 cateories=['BIKE','Kyber', 'Classic-MCEliece' ]
 message = "REQUEST TO CLIMB IN FL350"
 aes_key_size=32 #32 bytes for 256 key
-iterations=300
+iterations=3
+f=open("/home/spal/LDACS/stats.csv", "a")
 groupKEML3, groupAESL3=run_main(iterations,algorithmsL3, message, aes_key_size)
-print (f"For KEM {algorithmsL3}, execution time  {groupKEML3}")
+f.write(f"\nAlgorithm L-3 ,KEM_time, AES_time=f(KEM)\n")
+for i in range(len(algorithmsL3)):
+    f.write(f"{str(algorithmsL3[i])}, {str(groupKEML3[i])}, {str(groupAESL3[i])}\n")
+#print (f"For KEM {algorithmsL3}, execution time  {groupKEML3}")
 groupKEML5, groupAESL5=run_main(iterations,algorithmsL5, message, aes_key_size)
-print (f"For KEM {algorithmsL5}, execution time  {groupKEML5}")
-the_plot(cateories, groupKEML3,groupKEML5)
-the_plot(cateories, groupAESL3,groupAESL5)
-
+f.write(f"\nAlgorithm L-5 ,KEM_time, AES_time=f(KEM)\n")
+for i in range(len(algorithmsL5)):
+    f.write(f"{str(algorithmsL5[i])}, {str(groupKEML5[i])}, {str(groupAESL5[i])}\n")
+#print (f"For KEM {algorithmsL5}, execution time  {groupKEML5}")
+#the_plot(cateories, groupKEML3,groupKEML5)
+#the_plot(cateories, groupAESL3,groupAESL5)
+f.close()
+print ("Finish")
 
 
 

@@ -2,6 +2,7 @@
 #20250123
 #from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 import os
+import datetime 
 import oqs
 from collections import Counter
 import math
@@ -43,31 +44,39 @@ def calculate_entropy(data):
 if __name__ == "__main__":
     # AES-256 key (32 bytes)
     aes_key_size=32
-    algorithms=['BIKE-L3', 'BIKE-L5','Kyber768', 'Kyber1024','Classic-McEliece-6960119']
-    messages = ["REQUEST CLIMB TO FL300" , "CMPLY", "REQUEST DIVE TO FL230","CMPLY", "REQUEST DIVE TO FL300", "REQUEST DIVE TO FL200", "CMPLY"]
-    #messages=["The test setup in Tallinn, Estonia, did not aim at quantitative aspects such as bandwidth occupation"]
+    algorithms=[ 'BIKE-L3','Kyber768','BIKE-L5', 'Kyber1024','Classic-McEliece-6960119']
+    messages = ["REQUEST CLIMB TO FL100" , "CMPLY", "REQUEST CLIMB TO FL200","CMPLY", "REQUEST CLIMB TO FL300", "REQUEST CLIMB TO FL350", "CMPLY"]
     ciphertexts=[]
-    entropy_list=[[],[],[],[],[]]# long as the number of algorithms
-    f=open("stats.txt", "w")
-    for i in range(len(algorithms)):
-      kem = oqs.KeyEncapsulation(algorithms[i])
+    entropy_list=[[0],[0],[0],[0],[0]]# long as the number of algorithms    
+    f=open("/home/spal/LDACS/stats.csv","w")    
+    f.write(f"\n Entropy {datetime.datetime.now()} \nAlg./Messag.,")
+    times=5
+    for i in range(len(messages)):
+        f.write(f"m{i+1},")
+    for j in range(len(algorithms)):
+      kem = oqs.KeyEncapsulation(algorithms[j])
       public_key = kem.generate_keypair()
       aes_key=create_AES_cipher(kem, public_key, aes_key_size)
-      f.write(f"\nEntropy for {algorithms[i]}:")
+      f.write(f"\n{algorithms[j]}:,")
       for msg in messages:
-          iv = os.urandom(16)  # Initialization vector for AES
-          ciphertexts.append(AES_encrypt(aes_key, iv, msg))
-          entropy = calculate_entropy(ciphertexts)
-          entropy_list[i].append(entropy)
+          entropy=0
+          for _ in range(times):
+             iv = os.urandom(16)  # Initialization vector for AES
+             ciphertexts.append(AES_encrypt(aes_key, iv, msg))
+             entropy += calculate_entropy(ciphertexts)
+          entropy=entropy/times
+          entropy_list[j].append(entropy)
           f.write(f"{entropy},")
+      ciphertexts.clear()
 
           #print(ciphertexts)
-          print(f"For oqs {algorithms[i]} Entropy of Ciphertext: {entropy:.4f} bits/byte")
+          #print(f"For oqs {algorithms[i]} Entropy of Ciphertext: {entropy:.4f} bits/byte")
     f.close()
-
+    
     #Plot
     x = [1, 2, 3, 4, 5, 6, 7]  
-    y = entropy_list    
+    y = entropy_list  
+    '''
     plt.figure(figsize=(8, 5))
     for i, y_values in enumerate(y):
         plt.plot(x, y_values, marker='o', linestyle='-', label=f' {algorithms[i]}')
@@ -78,6 +87,6 @@ if __name__ == "__main__":
     # Add a legend and grid
     plt.legend()
     #plt.grid(True, linestyle='--', alpha=0.5)
-
+    '''
     # Show the plot
-    plt.show()
+    #plt.show()
