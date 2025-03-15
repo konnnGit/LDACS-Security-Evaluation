@@ -45,7 +45,6 @@ if __name__ == "__main__":
     aes_key_size=32
     algorithms=['BIKE-L3', 'BIKE-L5','Kyber768', 'Kyber1024','Classic-McEliece-6960119']
     messages = ["REQUEST CLIMB TO FL300" , "CMPLY", "REQUEST DIVE TO FL230","CMPLY", "REQUEST DIVE TO FL300", "REQUEST DIVE TO FL200", "CMPLY"]
-    #messages=["The test setup in Tallinn, Estonia, did not aim at quantitative aspects such as bandwidth occupation"]
     ciphertexts=[]
     entropy_list=[[],[],[],[],[]]# long as the number of algorithms
     f=open("stats.txt", "w")
@@ -60,9 +59,9 @@ if __name__ == "__main__":
           entropy = calculate_entropy(ciphertexts)
           entropy_list[i].append(entropy)
           f.write(f"{entropy},")
-
+      ciphertexts.clear()#Clear the ciphertext list to be empty for each algorithm (May change the initial paper submited values)
           #print(ciphertexts)
-          print(f"For oqs {algorithms[i]} Entropy of Ciphertext: {entropy:.4f} bits/byte")
+          #print(f"For oqs {algorithms[i]} Entropy of Ciphertext: {entropy:.4f} bits/byte")
     f.close()
 
     #Plot
