@@ -6,4 +6,4 @@ In order to produce experimental data there are three *python* files explained a
 Scripts'  results  have been executed  by an i3 processor.
 
 **Repository update-1, 2025 MAR 15**:  
-In order to create data series, generated after the execution, the plots plots placed in comments and data produced are appended in stats.csv. Related, there is an enhancement of the C.Entropy.py script and hence, the entropy differences between the ciphertexts have been mitigated but, still there are in the context of the initial commitment.
+In order to create data series, generated after the execution, the plots placed in comments and data produced are appended in stats.csv. Related, there is an enhancement of the C.Entropy.py script and hence, the entropy differences between the ciphertexts have been mitigated but, still there are in the context of the initial commitment.
