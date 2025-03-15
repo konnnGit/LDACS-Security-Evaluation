@@ -44,13 +44,13 @@ def calculate_entropy(data):
 if __name__ == "__main__":
     # AES-256 key (32 bytes)
     aes_key_size=32
-    algorithms=[ 'BIKE-L3','Kyber768','BIKE-L5', 'Kyber1024','Classic-McEliece-6960119']
+    algorithms=[ 'BIKE-L3', 'Kyber1024','Classic-McEliece-6960119']
     messages = ["REQUEST CLIMB TO FL100" , "CMPLY", "REQUEST CLIMB TO FL200","CMPLY", "REQUEST CLIMB TO FL300", "REQUEST CLIMB TO FL350", "CMPLY"]
     ciphertexts=[]
-    entropy_list=[[0],[0],[0],[0],[0]]# long as the number of algorithms    
-    f=open("/home/spal/LDACS/stats.csv","w")    
+    entropy_list=[[0],[0],[0]]# long as the number of algorithms    
+    f=open("/home/spal/update-1/stats.csv","w")    
     f.write(f"\n Entropy {datetime.datetime.now()} \nAlg./Messag.,")
-    times=5
+    times=1
     for i in range(len(messages)):
         f.write(f"m{i+1},")
     for j in range(len(algorithms)):
@@ -64,7 +64,7 @@ if __name__ == "__main__":
              iv = os.urandom(16)  # Initialization vector for AES
              ciphertexts.append(AES_encrypt(aes_key, iv, msg))
              entropy += calculate_entropy(ciphertexts)
-          entropy=entropy/times
+          entropy=entropy/float(times)
           entropy_list[j].append(entropy)
           f.write(f"{entropy},")
       ciphertexts.clear()
