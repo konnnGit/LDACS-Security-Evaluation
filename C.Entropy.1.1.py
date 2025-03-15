@@ -45,10 +45,11 @@ if __name__ == "__main__":
     # AES-256 key (32 bytes)
     aes_key_size=32
     algorithms=[ 'BIKE-L3', 'Kyber768','Classic-McEliece-6960119']
-    messages = ["REQUEST CLIMB TO FL100" , "CMPLY", "REQUEST CLIMB TO FL200","CMPLY", "REQUEST CLIMB TO FL320", "REQUEST CLIMB TO FL350", "CMPLY","REQUEST CLIMB TO FL330" ,"REQUEST CLIMB TO FL340","REQUEST CLIMB TO FL100" ,"REQUEST CLIMB TO F350"  , "REQUEST DIVE TO FL300" , "CMPLY", "REQUEST DIVE TO FL200","CMPLY", "REQUEST DIVE TO FL100",]
+    #messages = ["REQUEST CLIMB TO FL100" , "CMPLY", "REQUEST CLIMB TO FL200","CMPLY", "REQUEST CLIMB TO FL320", "REQUEST CLIMB TO FL350", "CMPLY","REQUEST CLIMB TO FL330" ,"REQUEST CLIMB TO FL340","REQUEST CLIMB TO FL100" ,"REQUEST CLIMB TO F350"  , "REQUEST DIVE TO FL300" , "CMPLY", "REQUEST DIVE TO FL200","CMPLY", "REQUEST DIVE TO FL100", "REQUEST CLIMB TO FL100" , "CMPLY", "REQUEST CLIMB TO FL200","CMPLY", "REQUEST CLIMB TO FL320", "REQUEST CLIMB TO FL350", "CMPLY","REQUEST CLIMB TO FL330" ,"REQUEST CLIMB TO FL340","REQUEST CLIMB TO FL100" ,"REQUEST CLIMB TO F350"  , "REQUEST DIVE TO FL300" , "CMPLY", "REQUEST DIVE TO FL200","CMPLY", "REQUEST DIVE TO FL100"]
+    messages = ["REQUEST CLIMB TO FL100", "REQUEST CLIMB TO FL200" , "REQUEST CLIMB TO FL210", "REQUEST CLIMB TO FL250", "REQUEST CLIMB TO FL280", "REQUEST CLIMB TO FL300","REQUEST DIVE TO FL200","CMPLY", "REQUEST DIVE TO FL100"]
     ciphertexts=[]
     entropy_list=[[0],[0],[0]]# long as the number of algorithms    
-    f=open("/home/spal/update-1/stats.csv","w")    
+    f=open("/home/spal/update-1/stats.csv","a")    
     f.write(f"\n Entropy {datetime.datetime.now()} \nAlg./Messag.,")
     times=1
     for i in range(len(messages)):
@@ -59,13 +60,14 @@ if __name__ == "__main__":
       aes_key=create_AES_cipher(kem, public_key, aes_key_size)
       f.write(f"\n{algorithms[j]}:,")
       for msg in messages:
-          entropy=0
-          for _ in range(times):
-             iv = os.urandom(16)  # Initialization vector for AES
-             ciphertexts.append(AES_encrypt(aes_key, iv, msg))
-             entropy += calculate_entropy(ciphertexts)
-          entropy=entropy/float(times)
-          entropy_list[j].append(entropy)
+          #entropy=0
+          #for _ in range(times):
+          iv = os.urandom(16)  # Initialization vector for AES
+          ciphertexts.append(AES_encrypt(aes_key, iv, msg))
+          #ciphertext=AES_encrypt(aes_key, iv, msg)
+          entropy = calculate_entropy(ciphertexts)
+          #entropy=entropy/float(times)
+      #entropy_list[j].append(entropy)
           f.write(f"{entropy},")
       ciphertexts.clear()
 
