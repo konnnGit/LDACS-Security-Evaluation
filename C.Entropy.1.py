@@ -2,6 +2,7 @@
 #20250123
 #from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 import os
+import numpy as np
 import datetime 
 import oqs
 from collections import Counter
@@ -45,12 +46,14 @@ if __name__ == "__main__":
     # AES-256 key (32 bytes)
     aes_key_size=32
     algorithms=[ 'BIKE-L3', 'Kyber768','Classic-McEliece-6960119']
-    messages = ["REQUEST CLIMB TO FL100" , "CMPLY", "REQUEST CLIMB TO FL200","CMPLY", "REQUEST CLIMB TO FL320", "REQUEST CLIMB TO FL350", "CMPLY","REQUEST CLIMB TO FL330" ,"REQUEST CLIMB TO FL340","REQUEST CLIMB TO FL100" ,"REQUEST CLIMB TO F350"  , "REQUEST DIVE TO FL300" , "CMPLY", "REQUEST DIVE TO FL200","CMPLY", "REQUEST DIVE TO FL100",]
+    m = ["REQUEST CLIMB TO FL100" , "CMPLY", "REQUEST CLIMB TO FL200","CMPLY", "REQUEST CLIMB TO FL320", "REQUEST CLIMB TO FL350", "CMPLY","REQUEST CLIMB TO FL330" ,"REQUEST CLIMB TO FL340","REQUEST CLIMB TO FL100" ,"REQUEST CLIMB TO F350"  , "REQUEST DIVE TO FL300" , "CMPLY", "REQUEST DIVE TO FL200","CMPLY", "REQUEST DIVE TO FL100",]
+    messages=4*m
     ciphertexts=[]
     entropy_list=[[0],[0],[0]]# long as the number of algorithms    
-    f=open("/home/spal/update-1/stats.csv","w")    
+    f=open("/home/spal/update-1/C.stats.csv","a")    
     f.write(f"\n Entropy {datetime.datetime.now()} \nAlg./Messag.,")
-    times=1
+    times=100
+    iv = os.urandom(16)  # Initialization vector for AES
     for i in range(len(messages)):
         f.write(f"m{i+1},")
     for j in range(len(algorithms)):
@@ -58,35 +61,20 @@ if __name__ == "__main__":
       public_key = kem.generate_keypair()
       aes_key=create_AES_cipher(kem, public_key, aes_key_size)
       f.write(f"\n{algorithms[j]}:,")
+      iv = os.urandom(16)  # Initialization vector for AES
       for msg in messages:
           entropy=0
           for _ in range(times):
-             iv = os.urandom(16)  # Initialization vector for AES
+             #iv = os.urandom(16)  # Initialization vector for AES
              ciphertexts.append(AES_encrypt(aes_key, iv, msg))
              entropy += calculate_entropy(ciphertexts)
           entropy=entropy/float(times)
           entropy_list[j].append(entropy)
           f.write(f"{entropy},")
       ciphertexts.clear()
-
+    for n in range(len(algorithms)):
+      f.write(f"\n For {algorithms[n]}, mean entropy: {np.mean(entropy_list[n])}, std: {np.std(entropy_list[n])}")
           #print(ciphertexts)
           #print(f"For oqs {algorithms[i]} Entropy of Ciphertext: {entropy:.4f} bits/byte")
     f.close()
-    
-    #Plot
-    x = [1, 2, 3, 4, 5, 6, 7]  
-    y = entropy_list  
-    '''
-    plt.figure(figsize=(8, 5))
-    for i, y_values in enumerate(y):
-        plt.plot(x, y_values, marker='o', linestyle='-', label=f' {algorithms[i]}')
-    plt.xticks(ticks=x)  # Set only integer ticks    
-    #plt.title('AES-256-GCM entropy encrypting alike content, from the AS side, with the same key.', fontsize=16)
-    plt.xlabel('Number of Messages', fontsize=12)
-    plt.ylabel('Entropy', fontsize=12)
-    # Add a legend and grid
-    plt.legend()
-    #plt.grid(True, linestyle='--', alpha=0.5)
-    '''
-    # Show the plot
-    #plt.show()
+

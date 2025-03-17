@@ -74,13 +74,13 @@ def the_plot(categories, group1,group2):
     plt.show()
 #-------main()-----------------------------
 print ("Start...")
-algorithmsL3=['BIKE-L3','Kyber768','Classic-McEliece-460896' ]
-algorithmsL5=['BIKE-L5','Kyber1024', 'Classic-McEliece-6960119' ]
+algorithmsL3=['Kyber768','BIKE-L3','Classic-McEliece-460896' ]
+algorithmsL5=['Kyber1024','BIKE-L5', 'Classic-McEliece-6960119' ]
 cateories=['BIKE','Kyber', 'Classic-MCEliece' ]
 message = "REQUEST TO CLIMB IN FL350"
 aes_key_size=32 #32 bytes for 256 key
 iterations=3
-f=open("/home/spal/LDACS/stats.csv", "a")
+f=open("/home/spal/update-1/A.stats.csv", "a")
 groupKEML3, groupAESL3=run_main(iterations,algorithmsL3, message, aes_key_size)
 f.write(f"\nAlgorithm L-3 ,KEM_time, AES_time=f(KEM)\n")
 for i in range(len(algorithmsL3)):
