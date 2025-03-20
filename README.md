@@ -6,4 +6,5 @@ Scripts'  results  have been executed  by an i3 processor.
 
 **Repository update-1, 2025 MAR 17**:  
 In order to create data series, generated after the execution, the plots placed in comments and data produced are appended in stats.csv. Related, there is an enhancement of the C.Entropy.py script and hence, the entropy differences between the ciphertexts have been mitigated but, still there are in the context of the initial commitment, as shown in the image.The raw data are at the C.stats.csv. The rational is to keep the AES initialation vector common for the same iteration, in order to evaluate the entropy  and relate it to each KEM.   
-![Entropy](image2.png)
+![Entropy-1](image-1.png)
+![Entropy-2](image-2.png)
