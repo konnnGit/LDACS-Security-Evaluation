@@ -5,7 +5,7 @@ from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
 import os
 import time
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import numpy as np
 
 def kem_work(algorithm):
@@ -14,14 +14,14 @@ def kem_work(algorithm):
     public_key = kem.generate_keypair()
     secret_key = kem.export_secret_key()
     ciphertext, shared_secret = kem.encap_secret(public_key)
-    return kem,  public_key
+    return kem,  public_key, shared_secret[:32]
 
 def create_AES_cipher(kem, public_key, key_size):
     ciphertext, shared_secret = kem.encap_secret(public_key)
     # Use shared secret as key for AES encryption
     aes_key = shared_secret[:key_size]
-    iv = os.urandom(16)  # Initialization vector for AES, 16 bytes
-    return aes_key,iv
+    #iv = os.urandom(16)  # Initialization vector for AES, 16 bytes
+    return aes_key
 
 def AES_encrypt(key, iv, message):
     cipher = AES.new(key, AES.MODE_CBC, iv)
@@ -32,6 +32,7 @@ def AES_decrypt(key, iv, ciphertext):
     decrypted_message = unpad(cipher.decrypt(ciphertext), AES.block_size).decode()
     return decrypted_message
 def run_main(iterations, algorithms, message, aes_key_size):
+    iv = os.urandom(16)# a global vector 
     avg_kem_time=[]
     avg_aes_time=[]
     for t in range(len(algorithms)):
@@ -40,11 +41,11 @@ def run_main(iterations, algorithms, message, aes_key_size):
     for i in range(iterations):
         for j  in range(len(algorithms)):
             start = time.time()
-            kem,public_key=kem_work(algorithms[j])
+            kem,public_key, key = kem_work(algorithms[j])
             stop = time.time()
             avg_kem_time[j]+=stop-start
+            #key=create_AES_cipher(kem,public_key,aes_key_size)
             start = time.time()
-            key,iv=create_AES_cipher(kem,public_key,aes_key_size)
             ciphertext = AES_encrypt(key, iv, message)
             decrypted_message = AES_decrypt(key, iv, ciphertext)
             stop = time.time()
@@ -79,8 +80,8 @@ algorithmsL5=['Kyber1024','BIKE-L5', 'Classic-McEliece-6960119' ]
 cateories=['BIKE','Kyber', 'Classic-MCEliece' ]
 message = "REQUEST TO CLIMB IN FL350"
 aes_key_size=32 #32 bytes for 256 key
-iterations=3
-f=open("/home/spal/update-1/A.stats.csv", "a")
+iterations=2000
+f=open("A.stats.csv", "a")
 groupKEML3, groupAESL3=run_main(iterations,algorithmsL3, message, aes_key_size)
 f.write(f"\nAlgorithm L-3 ,KEM_time, AES_time=f(KEM)\n")
 for i in range(len(algorithmsL3)):
@@ -95,8 +96,3 @@ for i in range(len(algorithmsL5)):
 #the_plot(cateories, groupAESL3,groupAESL5)
 f.close()
 print ("Finish")
-
-
-
-
-
